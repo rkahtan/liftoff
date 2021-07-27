@@ -41,11 +41,13 @@ export const updateExerciseThunk = (exercise) => {
     }
   };
 }
-export const deleteSingleExerciseThunk = (id) => {
+
+export const deleteSingleExerciseThunk = (id, history) => {
   return async (dispatch) => {
     try {
       await axios.delete(`/api/projects/${id}`);
       dispatch(deleteProject())
+      history.push('/exercises')
     } catch (e) {
       console.log(e);
     }

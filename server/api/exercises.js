@@ -40,7 +40,7 @@ router.get('/:id', async (req, res, next) => {
     })
     res.status(201).send(exercise)
     //get a single exercise (single exercise page)
-    //if the exercise's user matches - otherwise can't send that exercise to the user
+    //if the exercise's user matches - otherwise can't send that exercise to the user - will token check for that or nah
   } catch (err) {
     next(err)
   }
@@ -49,15 +49,27 @@ router.get('/:id', async (req, res, next) => {
 router.put('/:id', async (req, res, next) => {
   try {
     //update sets/reps/notes for SINGLE EXERCISE
+    const exercise = await Exercise.findByPk(req.params.id, {
+      where: {
+        userId: id
+      }
+    })
+    res.send(await exercise.update(req.body))
   } catch (err) {
     next(err)
   }
 })
 
 router.delete('/:id', async (req, res, next) => {
-  try {
-    //delete exercise
-    //re-route to all exercises page
+  try { 
+    const exercise = await Exercise.findByPk(req.params.id, {
+      where: {
+        userId: id
+      }
+    })
+    await exercise.destroy()
+    res.sendStatus(200)
+    //not returning exercise because thunk doesn't need it at the moment
   } catch (err) {
     next(err)
   }

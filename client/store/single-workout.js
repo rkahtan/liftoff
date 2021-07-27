@@ -40,11 +40,16 @@ export const updateWorkoutThunk = (workout) => {
     }
   };
 }
-export const deleteSingleWorkoutThunk = (id) => {
+//needs to be able to add/remove exercises to workout
+//as well as just updating the workout data itself
+//write another thunk probably that will also go into put route for /workouts/:id
+
+export const deleteSingleWorkoutThunk = (id, history) => {
   return async (dispatch) => {
     try {
       await axios.delete(`/api/workouts/${id}`);
       dispatch(deleteWorkout())
+      history.push('/workouts')
     } catch (e) {
       console.log(e);
     }

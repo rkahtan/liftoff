@@ -30,9 +30,12 @@ router.get('/:id', async (req, res, next) => {
   }
 })
 
+
 router.put('/:id', async (req, res, next) => {
   try {
-    //update associated exercises, notes for single workout
+    //update notes for single workout
+    //add associated exercise
+    //remove associated exercise
   } catch (err) {
     next(err)
   }
