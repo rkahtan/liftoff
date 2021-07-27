@@ -15,8 +15,6 @@ const addExercise = (exercise) => ({
   exercise
 })
 
-//is the reason auth is failing because thunk isn't sending token?
-//how to send token in every call in a DRY way?
 export const fetchExercises = (token) => {
   return async (dispatch) => {
     try {
@@ -32,10 +30,16 @@ export const fetchExercises = (token) => {
   }
 }
 
-export const addExerciseThunk = (exercise) => {
+export const addExerciseThunk = (exercise, token) => {
+  console.log(exercise)
+  console.log(token)
   return async(dispatch) => {
     try {
-      const { data: created } = await axios.post('/api/exercises', exercise)
+      const { data: created } = await axios.post('/api/exercises', exercise, {
+        headers: {
+          authorization: token
+        }
+      })
       dispatch(addExercise(created))
     } catch (err) {
       console.log(err)

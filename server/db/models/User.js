@@ -49,7 +49,6 @@ User.authenticate = async function({ username, password }){
 
 //verify token and get id from it
 User.findByToken = async function(token) {
-  console.log(token) //[object Object]
   try {
     const { id } = await jwt.verify(token, process.env.JWT)
     if (id) {
