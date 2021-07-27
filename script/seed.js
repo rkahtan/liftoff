@@ -1,6 +1,7 @@
 'use strict'
 
-const {db, models: {User} } = require('../server/db')
+const {db, models: {User, Exercise, Workout} } = require('../server/db')
+
 
 /**
  * seed - this function clears the database, updates tables to
@@ -10,20 +11,54 @@ async function seed() {
   await db.sync({ force: true }) // clears db and matches models to tables
   console.log('db synced!')
 
-  // Creating Users
-  const users = await Promise.all([
-    User.create({ username: 'cody', password: '123' }),
-    User.create({ username: 'murphy', password: '123' }),
-  ])
+  const cody = await User.create({ username: 'cody', password: '123' })
+  const murphy = await User.create({ username: 'murphy', password: '123' })
 
-  console.log(`seeded ${users.length} users`)
+  const bench_press = await Exercise.create({
+    name: 'bench press',
+    weight: '20 lbs',
+    sets: '4',
+    reps: '3',
+    notes: 'focus on elbows'
+  })
+
+  const front_squat = await Exercise.create({
+    name: 'front squat',
+    weight: '60 lbs',
+    sets: '4',
+    reps: '8'
+  })
+
+  const squat = await Exercise.create({
+    name: 'squat',
+    weight: '60 lbs',
+    sets: '4',
+    reps: '8'
+  })
+
+  const leg_day = await Workout.create({
+    name: 'leg day'
+  })
+
+  const chest_day = await Workout.create({
+    name: 'chest day'
+  })
+
+
+
+  //setting 2 exercises for user
+  await cody.addExercise(squat)
+  await cody.addExercise(bench_press)
+
+  //adding exercises to workout
+  await leg_day.setExercises([squat, front_squat])
+
+  //setting workout to user
+  //only association not working right now
+  await murphy.addWorkout(leg_day)
+
+  console.log(`seeded users`)
   console.log(`seeded successfully`)
-  return {
-    users: {
-      cody: users[0],
-      murphy: users[1]
-    }
-  }
 }
 
 /*

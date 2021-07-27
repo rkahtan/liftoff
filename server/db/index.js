@@ -1,14 +1,23 @@
-//this is the access point for all things database related!
-
 const db = require('./db')
 
 const User = require('./models/User')
+const Exercise = require('./models/Exercise')
+const Workout = require('./models/Workout')
 
-//associations could go here!
+User.hasMany(Workout)
+Workout.belongsTo(User)
+
+User.hasMany(Exercise)
+Exercise.belongsTo(User)
+
+Workout.belongsToMany(Exercise, {through: 'workout-exercises'})
+Exercise.belongsToMany(Workout, {through: 'workout-exercises'})
 
 module.exports = {
   db,
   models: {
     User,
+    Exercise,
+    Workout
   },
 }
