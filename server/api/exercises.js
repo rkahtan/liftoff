@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const { models: { Exercise }} = require('../db')
+const { models: { User, Exercise }} = require('../db')
 module.exports = router
 
 //req.user = user
@@ -21,8 +21,10 @@ router.get('/', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   try {
+    const {id} = req.user
     const exercise = await Exercise.create(req.body)
-    await req.user.addExercise(exercise)
+    const user = await User.findByPk(id)
+    await user.addExercise(exercise)
     res.status(201).send(exercise)
     //add an exercise to the db AND ASSOCIATE IT TO USER
   } catch (err) {
@@ -49,6 +51,7 @@ router.get('/:id', async (req, res, next) => {
 router.put('/:id', async (req, res, next) => {
   try {
     //update sets/reps/notes for SINGLE EXERCISE
+    const {id} = req.user
     const exercise = await Exercise.findByPk(req.params.id, {
       where: {
         userId: id
@@ -62,6 +65,7 @@ router.put('/:id', async (req, res, next) => {
 
 router.delete('/:id', async (req, res, next) => {
   try { 
+    const {id} = req.user
     const exercise = await Exercise.findByPk(req.params.id, {
       where: {
         userId: id
