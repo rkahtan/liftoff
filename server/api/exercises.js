@@ -2,12 +2,19 @@ const router = require('express').Router()
 const { models: { Exercise }} = require('../db')
 module.exports = router
 
- //ALWAYS CHECK FOR TOKEN
+//req.user = user
 
+//get all exercises for a given user
 router.get('/', async (req, res, next) => {
   try {
-    //get all exercises for a given user
-    res.json(users)
+    const {id} = req.user
+    const exercises = await Exercise.findAll({
+      where: {
+        userId: id
+      }
+    })
+    
+    res.json(exercises)
   } catch (err) {
     next(err)
   }

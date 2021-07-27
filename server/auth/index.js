@@ -4,7 +4,10 @@ module.exports = router
 
 router.post('/login', async (req, res, next) => {
   try {
+    //using req.body to find user in class method
     res.send({ token: await User.authenticate(req.body)}); 
+    //looks for user - if no user or if wrong password, error
+    //otherwise generate and SEND TOKEN
   } catch (err) {
     next(err)
   }
@@ -31,3 +34,5 @@ router.get('/me', async (req, res, next) => {
     next(ex)
   }
 })
+//this is used in axios call in auth thunk
+//returns user by token

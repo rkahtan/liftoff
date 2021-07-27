@@ -3,19 +3,10 @@ import history from '../history'
 
 const TOKEN = 'token'
 
-/**
- * ACTION TYPES
- */
 const SET_AUTH = 'SET_AUTH'
 
-/**
- * ACTION CREATORS
- */
 const setAuth = auth => ({type: SET_AUTH, auth})
 
-/**
- * THUNK CREATORS
- */
 export const me = () => async dispatch => {
   const token = window.localStorage.getItem(TOKEN)
   if (token) {
@@ -24,6 +15,8 @@ export const me = () => async dispatch => {
         authorization: token
       }
     })
+    //sending to express route with token in header
+    //express route's return value is the user
     return dispatch(setAuth(res.data))
   }
 }
@@ -54,6 +47,7 @@ export default function(state = {}, action) {
   switch (action.type) {
     case SET_AUTH:
       return action.auth
+      //will be checked for truthiness later to confirm if logged in
     default:
       return state
   }
