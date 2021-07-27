@@ -30,6 +30,8 @@ User.prototype.correctPassword = function(candidatePwd) {
 User.prototype.generateToken = function() {
   return jwt.sign({id: this.id}, process.env.JWT)
 }
+//CREATES token
+//called in authenticate, which is called in auth router which sends token
 
 /**
  * classMethods
@@ -47,6 +49,7 @@ User.authenticate = async function({ username, password }){
 
 //verify token and get id from it
 User.findByToken = async function(token) {
+  console.log(token) //[object Object]
   try {
     const { id } = await jwt.verify(token, process.env.JWT)
     if (id) {

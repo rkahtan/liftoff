@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { fetchExercises, addExerciseThunk } from '../store/exercises'
-import { Card, Container, Row, Button } from 'react-bootstrap';
 
 class Exercises extends React.Component {
   constructor(props) {
@@ -15,7 +14,9 @@ class Exercises extends React.Component {
   }
   componentDidMount() {
     try {
-      this.props.fetchExercises();
+      //passing token to thunk
+      const {token} = window.localStorage
+      this.props.fetchExercises(token);
       this.setState({ loading: false }); //this may need to go in did update instead?
     } catch (err) {
       this.setState({ error: err.message, loading: true });
@@ -24,12 +25,12 @@ class Exercises extends React.Component {
   addHandler() {}
   render() {
     return (
-      <Container>
+      <div>
         <h1>HELLO ARE YOU THERE</h1>
         {this.state.error && (
-          <Badge bg='secondary' className='center'>Error: {this.state.error}</Badge>
+          <h1 className='error'>Error: {this.state.error}</h1>
         )}
-      </Container>
+      </div>
     )
   }
 
@@ -41,9 +42,9 @@ const mapState = (state) => {
   }
 }
 
-const mapDispatch = (dispatch) => {
+const mapDispatch = (dispatch, token) => {
   return {
-    fetchExercises: () => dispatch(fetchExercises()),
+    fetchExercises: (token) => dispatch(fetchExercises(token)),
     addExercise: (exercise) => dispatch(addExerciseThunk(exercise))
   }
 }
