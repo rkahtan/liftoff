@@ -10,6 +10,9 @@ const Workout = db.define('workout', {
       notEmpty: true
     }
   },
+  notes: {
+    type: Sequelize.TEXT
+  }
 })
 
 module.exports = Workout
