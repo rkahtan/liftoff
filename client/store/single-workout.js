@@ -5,25 +5,54 @@ const SET_WORKOUT = 'SET_WORKOUT'
 const UPDATE_WORKOUT = 'UPDATE_WORKOUT'
 const DELETE_SINGLE_WORKOUT = 'DELETE_SINGLE_WORKOUT'
 
-const getWorkout = (workout) => ({
-  action: SET_WORKOUT,
+const setWorkout = (workout) => ({
+  type: SET_WORKOUT,
   workout
 })
 
 const updateWorkout = (workout) => ({
-  action: UPDATE_WORKOUT,
+  type: UPDATE_WORKOUT,
   workout
 })
 
-const deleteSingleWorkout = (workout) => ({
-  action: DELETE_SINGLE_WORKOUT,
-  workout
+const deleteSingleWorkout = () => ({
+  type: DELETE_SINGLE_WORKOUT
 })
 
-export const fetchWorkout = () => {}
-export const updateWorkoutThunk = () => {}
-export const deleteSingleWorkoutThunk = () => {}
+
+export const fetchWorkout = (id) => {
+  return async (dispatch) => {
+    try {
+      const { data } = await axios.get(`api/workouts/${id}`)
+      dispatch(setWorkout(data))
+    } catch (err) {
+      console.log(err)
+    }
+  }
+}
+export const updateWorkoutThunk = (workout) => {
+  return async (dispatch) => {
+    try {
+      const { data: updated } = await axios.put(`/api/workouts/${workout.id}`, workout);
+      dispatch(updateWorkout(updated));
+    } catch (e) {
+      console.log(e);
+    }
+  };
+}
+export const deleteSingleWorkoutThunk = (id) => {
+  return async (dispatch) => {
+    try {
+      await axios.delete(`/api/workouts/${id}`);
+      dispatch(deleteWorkout())
+    } catch (e) {
+      console.log(e);
+    }
+  };
+}
 //in single view, deleting should reroute to all workouts
+//assuming then the component will re-render without the deleted exercise, otherwise we will need
+//a delete thunk for the all exercises reducer as well that filters out this one (will need to return something from thunk then in order to filter)
 
 const initialState = {}
 

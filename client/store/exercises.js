@@ -5,38 +5,48 @@ const SET_EXERCISES = 'SET_EXERCISES'
 const ADD_EXERCISE = 'SET_EXERCISE'
 //adds another exercise to the list of exercises for a user
 
-const getExercises = (exercises) => ({
+const setExercises = (exercises) => ({
   type: SET_EXERCISES,
   exercises
 })
 
-const addExercise = (exercise) => {
+const addExercise = (exercise) => ({
   type: ADD_EXERCISE,
   exercise
+})
+
+export const fetchExercises = () => {
+  return async (dispatch) => {
+    try {
+      const { data } = await axios.get('/api/exercises')
+      dispatch(setExercises(data))
+    } catch (err) {
+      console.log(err)
+    }
+  }
 }
-//this will either return the addded exercise, in which case we either:
-//in reducer, return [...state.exercises, exercise]
-//in thunk, add exercise will return ALL exercises including the added one, in which case we need to update action creator to imply all exercises
 
-export const fetchExercises = () => {}
-
-export const addExerciseThunk = () => {}
-
-
-//thunks need to take in user's id from the token as well?
-
+export const addExerciseThunk = (exercise) => {
+  return async(dispatch) => {
+    try {
+      const { data: created } = await axios.post('/api/exercises', exercise)
+      dispatch(addExercise(created))
+    } catch (err) {
+      console.log(err)
+    }
+  }
+}
+//assuming this returns just the new exercise
 
 initialState = []
 
-export default function exercisessReducer(state=initialState, action) {
+export default function exercisesReducer(state=initialState, action) {
   switch (action.type) {
     case SET_EXERCISES:
       return action.exercises
     case ADD_EXERCISE:
-      return;
-      //edit this
+      return [...state, action.exercise];
     default:
       return state
-
   }
 }

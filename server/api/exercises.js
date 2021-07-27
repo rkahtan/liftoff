@@ -13,7 +13,6 @@ router.get('/', async (req, res, next) => {
         userId: id
       }
     })
-    
     res.json(exercises)
   } catch (err) {
     next(err)
@@ -22,6 +21,9 @@ router.get('/', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   try {
+    const exercise = await Exercise.create(req.body)
+    await req.user.addExercise(exercise)
+    res.status(201).send(exercise)
     //add an exercise to the db AND ASSOCIATE IT TO USER
   } catch (err) {
     next(err)
@@ -30,7 +32,15 @@ router.post('/', async (req, res, next) => {
 
 router.get('/:id', async (req, res, next) => {
   try {
+    const {id} = req.user
+    const exercise = await Exercise.findByPk(req.params.id, {
+      where: {
+        userId: id
+      }
+    })
+    res.status(201).send(exercise)
     //get a single exercise (single exercise page)
+    //if the exercise's user matches - otherwise can't send that exercise to the user
   } catch (err) {
     next(err)
   }
