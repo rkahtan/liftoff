@@ -38,7 +38,7 @@ export const addExerciseThunk = (exercise) => {
 }
 //assuming this returns just the new exercise
 
-initialState = []
+const initialState = []
 
 export default function exercisesReducer(state=initialState, action) {
   switch (action.type) {

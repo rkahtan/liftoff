@@ -39,7 +39,7 @@ export const addWorkoutThunk = (workout) => {
 }
 //this should give the option to assign exercises to a workout
 
-initialState = []
+const initialState = []
 
 export default function workoutsReducer(state=initialState, action) {
   switch (action.type) {

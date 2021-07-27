@@ -45,19 +45,20 @@ User.authenticate = async function({ username, password }){
     return user.generateToken();
 };
 
+//verify token and get id from it
 User.findByToken = async function(token) {
   try {
-    const {id} = await jwt.verify(token, process.env.JWT)
-    //verify token and get id from it
-    const user = User.findByPk(id)
-    if (!user) {
-      throw 'no dice'
+    const { id } = await jwt.verify(token, process.env.JWT)
+    if (id) {
+      return await User.findByPk(id);
     }
-    return user
+    const error = Error('bad credentials');
+    error.status = 401;
+    throw error;
   } catch (ex) {
-    const error = Error('bad token')
-    error.status = 401
-    throw error
+    const error = Error('bad credentials');
+    error.status = 401;
+    throw error;
   }
 }
 
