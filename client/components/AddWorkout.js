@@ -1,15 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { addExerciseThunk } from '../store/exercises'
+import { addWorkoutThunk } from '../store/workouts'
 
-class AddExercise extends React.Component {
+class AddWorkout extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       name: '',
-      weight: '',
-      sets: '',
-      reps: '',
       notes: ''
     };
     this.handleChange = this.handleChange.bind(this);
@@ -18,15 +15,12 @@ class AddExercise extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
     const {token} = window.localStorage
-    this.props.addExercise({ ...this.state }, token);
+    this.props.addWorkout({ ...this.state }, token);
     this.setState({
       name: '',
-      weight: '',
-      sets: '',
-      reps: '',
       notes: ''
     });
-    //doesn't re-set input fields WHY (update form does but steps look the same...)
+    //doesn't re-set input fields WHY
   }
   handleChange(e) {
     this.setState({
@@ -39,21 +33,24 @@ class AddExercise extends React.Component {
       <div>
         <form onSubmit={handleSubmit}>
           <input type='text' name='name' placeholder='Exercise Name' onChange={handleChange} />
-          <input type='text' name='weight' placeholder='Weight' onChange={handleChange} />
-          <input type='text' name='sets' placeholder='Sets' onChange={handleChange} />
-          <input type='text' name='reps' placeholder='Reps' onChange={handleChange} />
           <input type='textarea' name='notes' placeholder='Any Notes?' onChange={handleChange} />
-          <button type='submit'>Add Exercise</button>
+          <button type='submit'>Create Workout</button>
         </form>
       </div>
     )
   }
 }
 
-const mapDispatch = (dispatch) => {
+const mapState = (state) => {
   return {
-    addExercise: (exercise, token) => dispatch(addExerciseThunk(exercise, token))
+    exercises: state.exercises
   }
 }
 
-export default connect(null, mapDispatch)(AddExercise)
+const mapDispatch = (dispatch) => {
+  return {
+    addWorkout: (workout, token) => dispatch(addWorkoutThunk(workout, token))
+  }
+}
+
+export default connect(null, mapDispatch)(AddWorkout)

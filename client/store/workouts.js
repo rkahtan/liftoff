@@ -31,10 +31,14 @@ export const fetchWorkouts = (token) => {
   }
 }
 
-export const addWorkoutThunk = (workout) => {
+export const addWorkoutThunk = (workout, token) => {
   return async(dispatch) => {
     try {
-      const { data: created } = await axios.post('/api/workouts', workout)
+      const { data: created } = await axios.post('/api/workouts', workout, {
+        headers: {
+          authorization: token
+        }
+      })
       dispatch(addWorkout(created))
     } catch (err) {
       console.log(err)

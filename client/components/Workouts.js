@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import {fetchWorkouts} from '../store/workouts'
+import AddWorkout from './AddWorkout';
 //import thunks and kid compos (add workout)
 //this comp will link to single workout, whose child will be update workout
 
@@ -56,7 +57,7 @@ class Workouts extends React.Component {
         })}
         <div>
           <h1>Add A Workout:</h1>
-          {/* add workout component */}
+          <AddWorkout />
         </div>
       </div>
     );

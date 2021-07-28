@@ -20,10 +20,13 @@ const deleteSingleWorkout = () => ({
 })
 
 
-export const fetchWorkout = (id) => {
+export const fetchWorkout = (id, token) => {
   return async (dispatch) => {
     try {
-      const { data } = await axios.get(`api/workouts/${id}`)
+      const { data } = await axios.get(`/api/workouts/${id}`, {
+        headers: {
+          authorization: token
+        }})
       dispatch(setWorkout(data))
     } catch (err) {
       console.log(err)
