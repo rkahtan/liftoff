@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const { models: { User, Workout }} = require('../db')
+const { models: { User, Workout, Exercise }} = require('../db')
 module.exports = router
 
 //req.user = user
@@ -13,9 +13,6 @@ router.get('/', async (req, res, next) => {
       where: {
         userId: id
       },
-      include: {
-        model: Exercise
-      }
     })
     res.json(workouts)
   } catch (err) {

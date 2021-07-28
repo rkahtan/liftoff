@@ -16,10 +16,14 @@ const addWorkout = (workout) => ({
   workout
 })
 
-export const fetchWorkouts = () => {
+export const fetchWorkouts = (token) => {
   return async (dispatch) => {
     try {
-      const { data } = await axios.get('/api/workouts')
+      const { data } = await axios.get('/api/workouts', {
+        headers: {
+          authorization: token
+        }
+      })
       dispatch(setWorkouts(data))
     } catch (err) {
       console.log(err)
