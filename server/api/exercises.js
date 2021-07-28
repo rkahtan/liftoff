@@ -50,7 +50,6 @@ router.get('/:id', async (req, res, next) => {
 
 router.put('/:id', async (req, res, next) => {
   try {
-    //update sets/reps/notes for SINGLE EXERCISE
     const {id} = req.user
     const exercise = await Exercise.findByPk(req.params.id, {
       where: {
@@ -73,7 +72,6 @@ router.delete('/:id', async (req, res, next) => {
     })
     await exercise.destroy()
     res.sendStatus(200)
-    //not returning exercise because thunk doesn't need it at the moment
   } catch (err) {
     next(err)
   }

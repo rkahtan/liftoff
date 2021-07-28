@@ -7,8 +7,6 @@ module.exports = router
 const requireToken = async (req, res, next) => {
   try {
     const token = req.headers.authorization;
-    console.log(JSON.stringify(token)) //[object Object]
-    
     //using token send in header to check authorization and to get user info
     req.user = await User.findByToken(token)
     //set user info on req.user

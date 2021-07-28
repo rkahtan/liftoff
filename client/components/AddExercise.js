@@ -49,16 +49,10 @@ class AddExercise extends React.Component {
   }
 }
 
-const mapState = (state) => {
-  return {
-    exercises: state.exercises
-  }
-}
-
-const mapDispatch = (dispatch, token) => {
+const mapDispatch = (dispatch) => {
   return {
     addExercise: (exercise, token) => dispatch(addExerciseThunk(exercise, token))
   }
 }
 
-export default connect(mapState, mapDispatch)(AddExercise)
+export default connect(null, mapDispatch)(AddExercise)

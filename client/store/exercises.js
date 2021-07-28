@@ -31,8 +31,6 @@ export const fetchExercises = (token) => {
 }
 
 export const addExerciseThunk = (exercise, token) => {
-  console.log(exercise)
-  console.log(token)
   return async(dispatch) => {
     try {
       const { data: created } = await axios.post('/api/exercises', exercise, {

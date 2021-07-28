@@ -20,10 +20,13 @@ const deleteSingleExercise = () => ({
   type: DELETE_SINGLE_EXERCISE
 })
 
-export const fetchExercise = (id) => {
+export const fetchExercise = (id, token) => {
   return async (dispatch) => {
     try {
-      const { data } = await axios.get(`api/exercises/${id}`)
+      const { data } = await axios.get(`/api/exercises/${id}`, {
+        headers: {
+          authorization: token
+        }})
       dispatch(setExercise(data))
     } catch (err) {
       console.log(err)
@@ -31,10 +34,17 @@ export const fetchExercise = (id) => {
   }
 }
 
-export const updateExerciseThunk = (exercise) => {
+export const updateExerciseThunk = (id, exercise, token) => {
+  for (let key in exercise) {
+    if (exercise[key] === '')
+    delete exercise[key]
+  }
   return async (dispatch) => {
     try {
-      const { data: updated } = await axios.put(`/api/exercises/${exercise.id}`, exercise);
+      const { data: updated } = await axios.put(`/api/exercises/${id}`, exercise,  {
+        headers: {
+          authorization: token
+        }});
       dispatch(updateExercise(updated));
     } catch (e) {
       console.log(e);
@@ -42,20 +52,21 @@ export const updateExerciseThunk = (exercise) => {
   };
 }
 
-export const deleteSingleExerciseThunk = (id, history) => {
+export const deleteSingleExerciseThunk = (id, token, history) => {
   return async (dispatch) => {
     try {
-      await axios.delete(`/api/projects/${id}`);
-      dispatch(deleteProject())
+      await axios.delete(`/api/exercises/${id}`,  {
+        headers: {
+          authorization: token
+        }});
+      dispatch(deleteSingleExercise())
       history.push('/exercises')
     } catch (e) {
       console.log(e);
     }
   };
 }
-//in single view, deleting should reroute to all workouts
-//assuming then the component will re-render without the deleted exercise, otherwise we will need
-//a delete thunk for the all exercises reducer as well that filters out this one (will need to return something from thunk then in order to filter)
+
 
 const initialState = {}
 
