@@ -38,12 +38,13 @@ router.get('/:id', async (req, res, next) => {
     //eager load with exercises
     const {id} = req.user
     const workout = await Workout.findByPk(req.params.id, {
+      //find workout by associated user id
       where: {
         userId: id
       },
-      include: {
-        model: Exercise
-      }
+      //include workout's exercises 
+      include: 
+        [{model: Exercise}]
     })
     res.status(201).send(workout)
   } catch (err) {

@@ -46,16 +46,14 @@ async function seed() {
 
 
 
-  //setting 2 exercises for user
   await cody.addExercise(squat)
-  await cody.addExercise(bench_press)
+  await cody.addExercise(front_squat)
 
-  //adding exercises to workout
+
   await leg_day.setExercises([squat, front_squat])
 
-  //setting workout to user
-  //only association not working right now
-  await murphy.addWorkout(leg_day)
+
+  await cody.addWorkout(leg_day)
 
   console.log(`seeded users`)
   console.log(`seeded successfully`)
