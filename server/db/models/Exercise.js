@@ -4,7 +4,6 @@ const db = require('../db')
 const Exercise = db.define('exercise', {
   name: {
     type: Sequelize.STRING,
-    unique: true,
     allowNull: false,
     validate: {
       notEmpty: true

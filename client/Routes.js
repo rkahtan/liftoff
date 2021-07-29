@@ -8,6 +8,7 @@ import Exercises from './components/Exercises'
 import SingleExercise from './components/Single-Exercise';
 import Workouts from './components/Workouts';
 import SingleWorkout from './components/Single-Workout';
+// import UpdateWorkout from './components/UpdateWorkout';
 
 /**
  * COMPONENT
@@ -28,7 +29,8 @@ class Routes extends Component {
             <Route exact path="/exercises" component={Exercises} />
             <Route path="/exercises/:id" component={SingleExercise} />
             <Route exact path="/workouts" component={Workouts} />
-            <Route path="/workouts/:id" component={SingleWorkout} />
+            <Route exact path="/workouts/:id" component={SingleWorkout} />
+            {/* <Route path="/workouts/:id/update" component={UpdateWorkout} /> */}
           </Switch>
         ) : (
           <Switch>

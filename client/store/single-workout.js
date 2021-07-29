@@ -33,34 +33,81 @@ export const fetchWorkout = (id, token) => {
     }
   }
 }
-export const updateWorkoutThunk = (workout) => {
+export const updateWorkoutThunk = (id, workout, token) => {
+  console.log(id, workout, token) //this is ok so what's breaking the single workout component?
+  for (let key in workout) {
+    if (workout[key] === '')
+    delete workout[key]
+  }
   return async (dispatch) => {
     try {
-      const { data: updated } = await axios.put(`/api/workouts/${workout.id}`, workout);
+      const { data: updated } = await axios.put(`/api/workouts/${id}`, workout, {
+        headers: {
+          authorization: token
+        }});
       dispatch(updateWorkout(updated));
     } catch (e) {
       console.log(e);
     }
   };
 }
-//needs to be able to add/remove exercises to workout
-//as well as just updating the workout data itself
-//write another thunk probably that will also go into put route for /workouts/:id
 
-export const deleteSingleWorkoutThunk = (id, history) => {
+//updates but single workout component doesn't re-render to show new exercise until you re-load page
+export const associateExToWorkoutThunk = (method, workoutId, exerciseId, token) => {
+  console.log(method, workoutId, exerciseId, token)
   return async (dispatch) => {
     try {
-      await axios.delete(`/api/workouts/${id}`);
-      dispatch(deleteWorkout())
-      history.push('/workouts')
+      const { data: updated } = await axios.put(`/api/workouts/${workoutId}`, {
+        method,
+        exerciseId
+      }, {
+        headers: {
+          authorization: token
+        }});
+      console.log(updated)
+      dispatch(updateWorkout(updated));
+    } catch (e) {
+      console.log(e)
+    }
+  }
+}
+
+//nope rn
+export const dissociateExToWorkoutThunk = (method, workoutId, exerciseId, token) => {
+  console.log(method, workoutId, exerciseId, token) //ok
+  return async (dispatch) => {
+    try {
+      const { data: updated } = await axios.put(`/api/workouts/${workoutId}`, {
+        method,
+        exerciseId
+      }, {
+        headers: {
+          authorization: token
+        }});
+      dispatch(updateWorkout(updated));
+    } catch (e) {
+      console.log(e)
+    }
+  }
+}
+
+
+
+export const deleteSingleWorkoutThunk = (id, history, token) => {
+  return async (dispatch) => {
+    try {
+      await axios.delete(`/api/workouts/${id}`, {
+        headers: {
+          authorization: token
+        }});
+      dispatch(deleteSingleWorkout())
+      //history.push('/workouts') //doesn't work
     } catch (e) {
       console.log(e);
     }
   };
 }
-//in single view, deleting should reroute to all workouts
-//assuming then the component will re-render without the deleted exercise, otherwise we will need
-//a delete thunk for the all exercises reducer as well that filters out this one (will need to return something from thunk then in order to filter)
+
 
 const initialState = {}
 

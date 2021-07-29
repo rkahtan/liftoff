@@ -11,6 +11,8 @@ router.get('/', async (req, res, next) => {
       where: {
         userId: id
       },
+      include: 
+        [{model: Exercise}]
     })
     res.json(workouts)
   } catch (err) {
@@ -52,11 +54,35 @@ router.get('/:id', async (req, res, next) => {
   }
 })
 
+
+//send exercises with the updated!!!
 router.put('/:id', async (req, res, next) => {
   try {
-    //update notes for single workout
-    //add associated exercise
-    //remove associated exercise
+    const workout = await Workout.findByPk(req.params.id)
+    if (Object.keys(req.body).includes('method')) {
+      if (req.body['method'] === 'associate') {
+        await workout.addExercise(req.body.exerciseId)
+        const updatedWorkout = await Workout.findByPk(req.params.id, {
+          include: 
+            [{model: Exercise}]
+        })
+        res.send(updatedWorkout)
+      } else if (req.body['method'] === 'dissociate') {
+        await workout.removeExercise(req.body.exerciseId)
+        const updatedWorkout = await Workout.findByPk(req.params.id, {
+          include: 
+            [{model: Exercise}]
+        })
+        res.send(updatedWorkout)
+      }
+    } else {
+      await workout.update(req.body)
+      const updatedWorkout = await Workout.findByPk(req.params.id, {
+        include: 
+          [{model: Exercise}]
+      })
+      res.send(updatedWorkout)
+    }
   } catch (err) {
     next(err)
   }

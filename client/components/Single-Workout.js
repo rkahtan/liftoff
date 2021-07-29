@@ -1,9 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import {fetchWorkout} from '../store/single-workout'
+import {fetchWorkout, dissociateExToWorkoutThunk} from '../store/single-workout'
 import { Link } from 'react-router-dom';
-//import update workout component - in this you can add exercise associations
-
+import UpdateWorkout from './UpdateWorkout';
 
 class SingleWorkout extends React.Component {
   constructor(props) {
@@ -12,8 +11,10 @@ class SingleWorkout extends React.Component {
       error: null,
       loading: true,
     };
+    this.handleDissociate = this.handleDissociate.bind(this)
   }
   componentDidMount() {
+    
     try {
       const { token } = window.localStorage;
       const { id } = this.props.match.params;
@@ -29,9 +30,15 @@ class SingleWorkout extends React.Component {
       this.setState({ loading: false });
     }
   }
+  handleDissociate(e) {
+    const { token } = window.localStorage;
+    const { id } = this.props.workout;
+    this.props.dissociate('dissociate', id, e.target.value, token)
+  }
   render() {
     const { workout } = this.props;
     const {error, loading} = this.state
+    const {handleDissociate} = this
     return (
       <div>
         <div>
@@ -63,13 +70,14 @@ class SingleWorkout extends React.Component {
                 {exercise.reps && <h2>Reps: {exercise.reps}</h2>}
                 {exercise.notes && <h2>Notes: {exercise.notes}</h2>}
               </Link>
+              <button type='button' value={exercise.id} onClick={handleDissociate}>Remove This Exercise From Workout</button>
+              {/* button to remove exercise from workout */}
             </div>
           );
         })}
         <div>
           <h1>Update This Workout:</h1>
-          {/* <UpdateExercise id={this.props.match.params.id} history={this.props.history}/> */}
-          {/* update workout/associate exercises component */}
+          <UpdateWorkout history={this.props.history} workout={workout}/>
         </div>
       </div>
     );
@@ -86,6 +94,7 @@ const mapState = (state) => {
 const mapDispatch = (dispatch) => {
   return {
     fetchWorkout: (id, token) => dispatch(fetchWorkout(id, token)),
+    dissociate: (method, workoutId, exerciseId, token) => dispatch(dissociateExToWorkoutThunk(method, workoutId, exerciseId, token))
   };
 };
 
